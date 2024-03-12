@@ -7,26 +7,12 @@ cd /home/ubuntu
 unzip code.zip -x "resources/codebase_partner/node_modules/*"
 cd resources/codebase_partner
 npm install aws aws-sdk
-mysql -u root -e "CREATE USER 'nodeapp' IDENTIFIED WITH mysql_native_password BY 'student12'";
-mysql -u root -e "GRANT all privileges on *.* to 'nodeapp'@'%';"
-mysql -u root -e "CREATE DATABASE STUDENTS;"
-mysql -u root -e "USE STUDENTS; CREATE TABLE students(
-            id INT NOT NULL AUTO_INCREMENT,
-            name VARCHAR(255) NOT NULL,
-            address VARCHAR(255) NOT NULL,
-            city VARCHAR(255) NOT NULL,
-            state VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            phone VARCHAR(100) NOT NULL,
-            PRIMARY KEY ( id ));"
-sed -i 's/.*bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
-systemctl enable mysql
-service mysql restart
-export APP_DB_HOST=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-export APP_DB_USER=nodeapp
-export APP_DB_PASSWORD=student12
+
+export APP_DB_HOST=$(curl database-1.cxkqoo82mrb7.us-east-1.rds.amazonaws.com)
+export APP_DB_USER=admin
+export APP_DB_PASSWORD=12345678
 export APP_DB_NAME=STUDENTS
-export APP_PORT=80
+export APP_PORT=3306
 npm start &
 echo '#!/bin/bash -xe
 cd /home/ubuntu/resources/codebase_partner
